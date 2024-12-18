@@ -1,0 +1,23 @@
+.footer-stripped{padding:5px;border:none}
+.table_fix_23{display:flex;justify-content:space-between;border:none!important}
+.table_fix_23 .description{position:relative;top:4px;line-height:1.8em}
+.extended_layout_row .description{font-size:12px}
+.extended_layout_row .description .badge{border-radius:4px;padding:4px 6px;}
+#els-modal .modal-body{padding:0px}
+#els-modal .show_more{padding:8px;border-radius:0;border:0;-webkit-box-shadow:inset 0 1px 1px rgb(0 0 0/5%);box-shadow:inset 0 1px 1px rgb(0 0 0/5%);font-size:14px}
+#els-modal .show_more:hover{color:#444;background:#dcdcdc}
+#els-modal .control-label{padding-top:5px}
+#els-modal .form-horizontal .checkbox{padding-top:0}
+#els-modal .form-horizontal .radio,.form-horizontal .checkbox{min-height:21px}
+#els-modal .form-horizontal .radio-inline,.form-horizontal .checkbox-inline{padding-top:0}
+#els-modal .form-group{padding-top:10px;padding-bottom:10px;margin-bottom:0}
+#els-modal .input-group{display:flex}
+#els-modal .input-group-sm input[type=text], #els-modal .input-group-sm select{height: 28px!important;}
+#els-modal .input-group-addon{width:auto}
+#els-modal .input-group-addon+.form-control:not(:last-child){border-right:0}
+#els-modal select.form-control:first-child+.input-group-addon{border-left:0}
+#els-modal .form-control+.input-group-addon{border-right:0}
+#els-modal .well-sm{padding:5px;margin-bottom:10px}
+#els-modal .more_hidden{display:none}
+#els-modal .fstw10{min-width:10em;max-width:10em}
+#els-modal .modal-backdrop{position:fixed}

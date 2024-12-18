@@ -1,0 +1,465 @@
+<!-- show start -->
+<input type="hidden" name="module_row" value="{{ module_row }}">
+
+<div class="form-group form-group-sm sshow">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_show_help }}">{{ entry_show }}</span></label>
+  <div class="col-sm-10">
+    {% if settings['show'] is defined %}
+    <label class="radio-inline">
+      {% if settings['show'] %}
+      <input type="radio" name="show" value="1" checked="checked" />
+      &nbsp;{{ filter_show }}
+      {% else %}
+      <input type="radio" name="show" value="1" />
+      &nbsp;{{ filter_show }}
+      {% endif %}
+    </label>
+    <label class="radio-inline">
+      {% if not settings['show'] %}
+      <input type="radio" name="show" value="0" checked="checked" />
+      &nbsp;{{ filter_hide }}
+      {% else %}
+      <input type="radio" name="show" value="0" />
+      &nbsp;{{ filter_hide }}
+      {% endif %}
+    </label>
+    {% else %}
+    <label class="radio-inline">
+      <input type="radio" name="show" value="1" checked="checked" />
+      &nbsp;{{ filter_show }}
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="show" value="0" />
+      &nbsp;{{ filter_hide }}
+    </label>
+    {% endif %}
+  </div>
+</div>
+<!-- show end -->
+<!-- sub filters choose start -->
+{% if filters|length <= 1 %}
+<input type="hidden" name="type" value="{{ filters|keys|first }}">
+{% else %}
+<div class="form-group form-group-sm">
+  <label class="col-sm-2 control-label" for="type">{{ entry_filter_type }}</label>
+  <div class="col-sm-10">
+    <select class="form-control select_type" name="type" id="type"{{ (filters|length == 1) ? ' disabled' : '' }}>
+      {% for type_key, type_caption in filters %}
+        {% if ((settings['type'] is defined) and (type_key == settings['type'])) or (filters|length == 1) %}
+          <option value="{{ type_key }}" selected="selected">{{ type_caption }}</option>
+        {% else %}
+          <option value="{{ type_key }}">{{ type_caption }}</option>
+        {% endif %}
+      {% endfor%}
+    </select>
+  </div>
+</div>
+{% endif %}
+<!-- sub filters choose end -->
+<!-- sub filters content start -->
+{% if layout_type == 'product' %}
+<!-- product start -->
+<div class="form-group form-group-sm sproducts">
+  <label class="col-sm-2 control-label" for="input-related"><span data-toggle="tooltip" title="{{ entry_product_help }}">{{ entry_product }}</span></span></label>
+  <div class="col-sm-10">
+    <input type="text" name="products_search" value="" placeholder="{{ text_form_autocomplete }}" id="input-product" class="form-control" />
+    <div id="product_id" class="well well-sm" style="height: 150px; overflow: auto;">
+      {% for product in settings['products_parsed'] %}
+      <div id="product_id{{ product.id }}"><i class="fa fa-minus-circle"></i> {{ product.name }}
+        <input type="hidden" name="product_id[]" value="{{ product.id }}" />
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="form-group form-group-sm sproduct_categories">
+  <label class="col-sm-2 control-label">{{ entry_category }}</label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for category_key, category_data in categories %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['category_id'] is defined) and (category_data['category_id'] in settings['category_id']) %} 
+          <input type="checkbox" name="category_id[{{ category_data['category_id'] }}]" id="category_id[{{ category_data['category_id'] }}]" value="{{ category_data['category_id'] }}" checked="checked" />
+          &nbsp;{{ category_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="category_id[{{ category_data['category_id'] }}]" id="category_id[{{ category_data['category_id'] }}]" value="{{ category_data['category_id'] }}" />
+          &nbsp;{{ category_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_mobile_desc|raw }}</span>
+  </div>
+</div>
+
+<div class="form-group form-group-sm sproduct_manufacturers">
+  <label class="col-sm-2 control-label">{{ entry_manufacturer }}</label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for manufacturer_key, manufacturer_data in manufacturers %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['manufacturer_id'] is defined) and (manufacturer_data['manufacturer_id'] in settings['manufacturer_id']) %} 
+          <input type="checkbox" name="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" id="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" value="{{ manufacturer_data['manufacturer_id'] }}" checked="checked" />
+          &nbsp;{{ manufacturer_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" id="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" value="{{ manufacturer_data['manufacturer_id'] }}" />
+          &nbsp;{{ manufacturer_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_mobile_desc|raw }}</span>
+  </div>
+</div>
+<!-- product end -->
+<!-- category start -->
+{% elseif layout_type == 'category' %}
+<div class="form-group form-group-sm scategories">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_category_help }}">{{ entry_category }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for category_key, category_data in categories %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['category_id'] is defined) and (category_data['category_id'] in settings['category_id']) %} 
+          <input type="checkbox" name="category_id[{{ category_data['category_id'] }}]" id="category_id[{{ category_data['category_id'] }}]" value="{{ category_data['category_id'] }}" checked="checked" />
+          &nbsp;{{ category_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="category_id[{{ category_data['category_id'] }}]" id="category_id[{{ category_data['category_id'] }}]" value="{{ category_data['category_id'] }}" />
+          &nbsp;{{ category_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_mobile_desc|raw }}</span>
+  </div>
+</div>
+<!-- category end -->
+<!-- manufacturer start -->
+{% elseif layout_type == 'manufacturer' %}
+<div class="form-group form-group-sm smanufacturers">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_manufacturer_help }}">{{ entry_manufacturer }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for manufacturer_key, manufacturer_data in manufacturers %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['manufacturer_id'] is defined) and (manufacturer_data['manufacturer_id'] in settings['manufacturer_id']) %} 
+          <input type="checkbox" name="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" id="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" value="{{ manufacturer_data['manufacturer_id'] }}" checked="checked" />
+          &nbsp;{{ manufacturer_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" id="manufacturer_id[{{ manufacturer_data['manufacturer_id'] }}]" value="{{ manufacturer_data['manufacturer_id'] }}" />
+          &nbsp;{{ manufacturer_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_mobile_desc|raw }}</span>
+  </div>
+</div>
+<!-- manufacturer end -->
+<!-- information start -->
+{% elseif layout_type == 'information' %}
+<div class="form-group form-group-sm sinformations">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_information_help }}">{{ entry_information }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for information_key, information_data in informations %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['information_id'] is defined) and (information_data['information_id'] in settings['information_id']) %} 
+          <input type="checkbox" name="information_id[{{ information_data['information_id'] }}]" id="information_id[{{ information_data['information_id'] }}]" value="{{ information_data['information_id'] }}" checked="checked" />
+          &nbsp;{{ information_data['title'] }}
+          {% else %}
+          <input type="checkbox" name="information_id[{{ information_data['information_id'] }}]" id="information_id[{{ information_data['information_id'] }}]" value="{{ information_data['information_id'] }}" />
+          &nbsp;{{ information_data['title'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_mobile_desc|raw }}</span>
+    </div>
+</div>
+{% endif %}
+<!-- information end -->
+<!-- sub filters content end -->
+<!-- default start -->
+<div class="form-group form-group-sm scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_mobile_help }}">{{ entry_mobile }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for mobile_key, mobile_name in mobile %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['mobile'] is defined) and (mobile_key in settings['mobile']) %} 
+          <input type="checkbox" name="mobile[{{ mobile_key }}]" id="mobile[{{ mobile_key }}]" value="{{ mobile_key }}" checked="checked" />
+          &nbsp;{{ mobile_name }}
+          {% else %}
+          <input type="checkbox" name="mobile[{{ mobile_key }}]" id="mobile[{{ mobile_key }}]" value="{{ mobile_key }}" />
+          &nbsp;{{ mobile_name }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_mobile_desc|raw }}</span>
+  </div>
+</div>
+
+{% if languages|length > 1 %}
+<div class="form-group form-group-sm scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_languages_help }}">{{ entry_languages }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for language_data in languages %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['language_id'] is defined) and (language_data['language_id'] in settings['language_id']) %} 
+          <input type="checkbox" name="language_id[{{ language_data['language_id'] }}]" id="language_id[{{ language_data['language_id'] }}]" value="{{ language_data['language_id'] }}" checked="checked" />
+          &nbsp;{{ language_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="language_id[{{ language_data['language_id'] }}]" id="language_id[{{ language_data['language_id'] }}]" value="{{ language_data['language_id'] }}" />
+          &nbsp;{{ language_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a>
+  </div>
+</div>
+{% endif %}
+
+{% if currencies|length > 1 %}
+<div class="form-group form-group-sm scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_currencies_help }}">{{ entry_currencies }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for currency in currencies %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['currency_id'] is defined) and (currency['currency_id'] in settings['currency_id']) %} 
+          <input type="checkbox" name="currency_id[{{ currency['currency_id'] }}]" id="currency_id[{{ currency['currency_id'] }}]" value="{{ currency['currency_id'] }}" checked="checked" />
+          &nbsp;{{ currency['title'] }}
+          {% else %}
+          <input type="checkbox" name="currency_id[{{ currency['currency_id'] }}]" id="currency_id[{{ currency['currency_id'] }}]" value="{{ currency['currency_id'] }}" />
+          &nbsp;{{ currency['title'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a>
+  </div>
+</div>
+{% endif %}
+
+<div class="form-group form-group-sm scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_customer_group_help }}">{{ entry_customer_group }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for customer_group_key, customer_group_data in customer_groups %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['customer_group_id'] is defined) and (customer_group_data['customer_group_id'] in settings['customer_group_id']) %} 
+          <input type="checkbox" name="customer_group_id[{{ customer_group_data['customer_group_id'] }}]" id="customer_group_id[{{ customer_group_data['customer_group_id'] }}]" value="{{ customer_group_data['customer_group_id'] }}" checked="checked" />
+          &nbsp;{{ customer_group_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="customer_group_id[{{ customer_group_data['customer_group_id'] }}]" id="customer_group_id[{{ customer_group_data['customer_group_id'] }}]" value="{{ customer_group_data['customer_group_id'] }}" />
+          &nbsp;{{ customer_group_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a>
+  </div>
+</div>
+
+{% if stores|length > 1 %}
+<div class="form-group form-group-sm sstores module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="{{ entry_stores_help }}">{{ entry_stores }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for store_key, store_data in stores %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['customer_group_id'] is defined) and (store_data['customer_group_id'] in settings['customer_group_id']) %} 
+          <input type="checkbox" name="store_id[{{ store_data['store_id'] }}]" id="store_id[{{ store_data['store_id'] }}]" value="{{ store_data['store_id'] }}" checked="checked" />
+          &nbsp;{{ store_data['name'] }}
+          {% else %}
+          <input type="checkbox" name="store_id[{{ store_data['store_id'] }}]" id="store_id[{{ store_data['store_id'] }}]" value="{{ store_data['store_id'] }}" />
+          &nbsp;{{ store_data['name'] }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a>
+  </div>
+</div>
+{% endif %}
+
+<div class="form-group form-group-sm {{ (settings['sub_total']['currency_id'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="{{ entry_sub_total_help }}">{{ entry_sub_total }}</span></label>
+  <div class="col-sm-10">
+    <div class="input-group input-group-sm">
+      <span class="input-group-addon fstw10">{{ entry_sub_total_addon1 }}</span>
+      <select class="form-control auto_disabled" name="sub_total[currency_id]">
+        <option value="0" {{ (settings['sub_total']['currency_id'] is defined) and (settings['sub_total']['currency_id'] == 0) ? 'selected="selected"' : '' }}>{{text_disabled }}</option>
+        {% for currency in currencies %}
+          {% if (settings['sub_total']['currency_id'] is defined) and (currency['currency_id'] == settings['sub_total']['currency_id']) %}
+            <option value="{{ currency['currency_id'] }}" selected="selected">{{ currency['title'] }}</option>
+          {% else %}
+            <option value="{{ currency['currency_id'] }}">{{ currency['title'] }}</option>
+          {% endif%}
+        {% endfor%}
+      </select>
+      <span class="input-group-addon">{{ entry_sub_total_addon2 }}</span>
+      <input type="text" class="form-control" name="sub_total[min]" value="{{ (settings['sub_total']['min'] is defined) ? settings['sub_total']['min'] : 0 }}">
+      <span class="input-group-addon">{{ entry_sub_total_addon3 }}</span>
+      <input type="text" class="form-control" name="sub_total[max]" value="{{ (settings['sub_total']['max'] is defined) ? settings['sub_total']['max'] : 0 }}">
+    </div>
+  </div>
+</div>
+
+<div class="form-group form-group-sm {{ (settings['total']['currency_id'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="{{ entry_total_help }}">{{ entry_total }}</span></label>
+  <div class="col-sm-10">
+    <div class="input-group input-group-sm">
+      <span class="input-group-addon fstw10">{{ entry_total_addon1 }}</span>
+      <select class="form-control auto_disabled" name="total[currency_id]">
+        <option value="0" {{ (settings['total']['currency_id'] is defined) and (settings['total']['currency_id'] == 0) ? 'selected="selected"' : '' }}>{{ text_disabled }}</option>
+        {% for currency in currencies %}
+          {% if (settings['total']['currency_id'] is defined) and (currency['currency_id'] == settings['total']['currency_id']) %}
+            <option value="{{ currency['currency_id'] }}" selected="selected">{{ currency['title'] }}</option>
+          {% else %}
+            <option value="{{ currency['currency_id'] }}">{{ currency['title'] }}</option>
+          {% endif %}
+        {% endfor%}
+      </select>
+      <span class="input-group-addon">{{ entry_total_addon2 }}</span>
+      <input type="text" class="form-control" name="total[min]" value="{{ (settings['total']['min'] is defined) ? settings['total']['min'] : 0 }}">
+      <span class="input-group-addon">{{ entry_total_addon3 }}</span>
+      <input type="text" class="form-control" name="total[max]" value="{{ (settings['total']['max'] is defined) ? settings['total']['max'] : 0 }}">
+    </div>
+  </div>
+</div>
+
+<div class="form-group form-group-sm {{ (settings['weight']['weight_class_id'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="{{ entry_weight_help }}">{{ entry_weight }}</span></label>
+  <div class="col-sm-10">
+    <div class="input-group input-group-sm">
+      <span class="input-group-addon fstw10">{{ entry_weight_addon1 }}</span>
+      <select class="form-control auto_disabled" name="weight[weight_class_id]">
+        <option value="0" {{ (settings['weight']['weight_class_id'] is defined) and (settings['weight']['weight_class_id'] == 0) ? 'selected="selected"' : '' }}>{{ text_disabled }}</option>
+        {% for weight_class in weight_classes %}
+          {% if (settings['weight']['weight_class_id'] is defined) and (weight_class['weight_class_id'] == settings['weight']['weight_class_id']) %}
+            <option value="{{ weight_class['weight_class_id'] }}" selected="selected">{{ weight_class['title'] }}</option>
+          {% else %}
+            <option value="{{ weight_class['weight_class_id'] }}">{{ weight_class['title'] }}</option>
+          {% endif %}
+        {% endfor%}
+      </select>
+      <span class="input-group-addon">{{ entry_weight_addon2 }}</span>
+      <input type="text" class="form-control" name="weight[min]" value="{{ (settings['weight']['min'] is defined) ? settings['weight']['min'] : 0 }}">
+      <span class="input-group-addon">{{ entry_weight_addon3 }}</span>
+      <input type="text" class="form-control" name="weight[max]" value="{{ (settings['weight']['max'] is defined) ? settings['weight']['max'] : 0 }}">
+    </div>
+  </div>
+</div>
+
+<div class="form-group form-group-sm {{ (settings['count']['enabled'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="{{ entry_cart_products_help }}">{{ entry_cart_products }}</span></label>
+  <div class="col-sm-10">
+    <div class="input-group input-group-sm">
+      <select class="form-control fstw10 auto_disabled" name="count[enabled]">
+        {% if settings['count']['enabled'] is defined %}
+          <option value="0">{{ text_disabled }}</option>
+          <option value="1" selected="selected">{{ text_enabled }}</option>
+        {% else%}
+          <option value="0" selected="selected">{{ text_disabled }}</option>
+          <option value="1">{{ text_enabled }}</option>
+        {% endif %}
+      </select>
+      <span class="input-group-addon">{{ entry_cart_products_addon1 }}</span>
+      <input type="text" class="form-control" name="count[min]" value="{{ (settings['count']['min'] is defined) ? settings['count']['min'] : 0 }}">
+      <span class="input-group-addon">{{ entry_cart_products_addon2 }}</span>
+      <input type="text" class="form-control" name="count[max]" value="{{ (settings['count']['max'] is defined) ? settings['count']['max'] : 0 }}">
+    </div>
+  </div>
+</div>
+
+<div class="form-group form-group-sm {{ (settings['custom']['enabled'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="{{ entry_custom_help }}">{{ entry_custom }}</span></label>
+  <div class="col-sm-10">
+    <div class="input-group input-group-sm">
+      <select class="form-control fstw10 auto_disabled" name="custom[enabled]">
+        {% if settings['custom']['enabled'] is defined %}
+          <option value="0">{{ text_disabled }}</option>
+          <option value="1" selected="selected">{{ text_enabled }}</option>
+        {% else%}
+          <option value="0" selected="selected">{{ text_disabled }}</option>
+          <option value="1">{{ text_enabled }}</option>
+        {% endif %}
+      </select>
+      <span class="input-group-addon">{{ entry_custom_addon1 }}</span>
+      <input type="text" class="form-control" name="custom[id]" value="{{ (settings['custom']['id'] is defined) ? settings['custom']['id'] : 0 }}">
+      <span class="input-group-addon">{{ entry_custom_addon2 }}</span>
+      <input type="text" class="form-control" name="custom[values]" value="{{ (settings['custom']['values'] is defined) ? settings['custom']['values'] : 0 }}">
+    </div>
+  </div>
+</div>
+
+<div class="form-group form-group-sm {{ (settings['platform'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_platform_help }}">{{ entry_platform }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for platform in platforms %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['platform'] is defined) and (platform in settings['platform']) %} 
+          <input type="checkbox" name="platform[{{ platform }}]" id="platform[{{ platform }}]" value="{{ platform }}" checked="checked" />
+          &nbsp;{{ platform }}
+          {% else %}
+          <input type="checkbox" name="platform[{{ platform }}]" id="platform[{{ platform }}]" value="{{ platform }}" />
+          &nbsp;{{ platform }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_platform_desc|raw }}</span>
+  </div>
+</div>
+
+<div class="form-group form-group-sm {{ (settings['browser'] is not defined) ? ' more_hidden' : '' }} scustomer_groups module{{ layout_id }} common{{ layout_id }}">
+  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ entry_browser_help }}">{{ entry_browser }}</span></label>
+  <div class="col-sm-10">
+    <div class="well well-sm" style="max-height: 250px; overflow: auto;">
+      {% for browser in browsers %}
+      <div class="checkbox">
+        <label>
+          {% if (settings['browser'] is defined) and (browser in settings['browser']) %} 
+          <input type="checkbox" name="browser[{{ browser }}]" id="browser[{{ browser }}]" value="{{ browser }}" checked="checked" />
+          &nbsp;{{ browser }}
+          {% else %}
+          <input type="checkbox" name="browser[{{ browser }}]" id="browser[{{ browser }}]" value="{{ browser }}" />
+          &nbsp;{{ browser }}
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', true);return false;">{{ text_select_all }}</a> / <a href="#" onclick="$(this).parent().find(':checkbox').prop('checked', false);return false;">{{ text_unselect_all }}</a> <span class="pull-right">{{ entry_browser_desc|raw }}</span>
+  </div>
+</div>
+<button class="btn-block show_more" onClick="$('.more_hidden').removeClass('more_hidden');$(this).remove();">{{ text_show_more }}</button>
