@@ -26,3 +26,7 @@
 * fix: Fixed error when accessing a non-existent class property in the library.
 * fix: Fixed bug with empty USER_AGENT.
 
+#### 1.2.3.1
+
+* fix: Fixed success state handler for ajax
+
