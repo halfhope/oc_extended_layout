@@ -193,7 +193,7 @@
 <?php endswitch ?>
 <!-- sub filters content end -->
 <!-- default start -->
-<div class="form-group suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_mobile_help; ?>"><?php echo $entry_mobile; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">
@@ -216,7 +216,7 @@
 </div>
 
 <?php if (count($languages) > 1): ?>
-<div class="form-group scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_languages_help; ?>"><?php echo $entry_languages; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">
@@ -240,7 +240,7 @@
 <?php endif ?>
 
 <?php if (count($currencies) > 1): ?>
-<div class="form-group scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_currencies_help; ?>"><?php echo $entry_currencies; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">
@@ -263,7 +263,7 @@
 </div>
 <?php endif ?>
 
-<div class="form-group scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_customer_group_help; ?>"><?php echo $entry_customer_group; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">
@@ -286,7 +286,7 @@
 </div>
 
 <?php if (count($stores) > 1): ?>
-<div class="form-group scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm scommon module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="<?php echo $entry_stores_help; ?>"><?php echo $entry_stores; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">
@@ -309,7 +309,7 @@
 </div>
 <?php endif ?>
 
-<div class="form-group <?php echo !isset($settings['total']['currency_id']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['total']['currency_id']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="<?php echo $entry_total_help; ?>"><?php echo $entry_total; ?></span></label>
   <div class="col-sm-10">
     <div class="input-group input-group-sm">
@@ -332,7 +332,7 @@
   </div>
 </div>
 
-<div class="form-group <?php echo !isset($settings['sub_total']['currency_id']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['sub_total']['currency_id']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="<?php echo $entry_sub_total_help; ?>"><?php echo $entry_sub_total; ?></span></label>
   <div class="col-sm-10">
     <div class="input-group input-group-sm">
@@ -355,7 +355,7 @@
   </div>
 </div>
 
-<div class="form-group <?php echo !isset($settings['weight']['weight_class_id']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['weight']['weight_class_id']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="<?php echo $entry_weight_help; ?>"><?php echo $entry_weight; ?></span></label>
   <div class="col-sm-10">
     <div class="input-group input-group-sm">
@@ -378,7 +378,7 @@
   </div>
 </div>
 
-<div class="form-group <?php echo !isset($settings['count']['enabled']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['count']['enabled']) ? 'more_hidden' : ''; ?> scart module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="<?php echo $entry_cart_products_help; ?>"><?php echo $entry_cart_products; ?></span></label>
   <div class="col-sm-10">
     <div class="input-group input-group-sm">
@@ -399,7 +399,7 @@
   </div>
 </div>
 
-<div class="form-group <?php echo !isset($settings['custom']['enabled']) ? 'more_hidden' : ''; ?> ssystem module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['custom']['enabled']) ? 'more_hidden' : ''; ?> ssystem module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-html="true" title="<?php echo $entry_custom_help; ?>"><?php echo $entry_custom; ?></span></label>
   <div class="col-sm-10">
     <div class="input-group input-group-sm">
@@ -420,7 +420,7 @@
   </div>
 </div>
 
-<div class="form-group <?php echo !isset($settings['platform']) ? 'more_hidden' : ''; ?> suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['platform']) ? 'more_hidden' : ''; ?> suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_platform_help; ?>"><?php echo $entry_platform; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">
@@ -442,7 +442,7 @@
   </div>
 </div>
 
-<div class="form-group <?php echo !isset($settings['browser']) ? 'more_hidden' : ''; ?> suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
+<div class="form-group form-group-sm <?php echo !isset($settings['browser']) ? 'more_hidden' : ''; ?> suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_browser_help; ?>"><?php echo $entry_browser; ?></span></label>
   <div class="col-sm-10">
     <div class="well well-sm" style="max-height: 250px; overflow: auto;">

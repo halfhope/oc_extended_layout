@@ -5,7 +5,7 @@
 
 class ControllerModuleExtendedLayout extends Controller {
 	
-	private $_version = '1.2';
+	private $_version = '1.2.1';
 	public 	$_route = 'module/extended_layout';
 	public 	$_model = 'model_module_extended_layout';
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Extended layout</name>
-	<version>1.2</version>
+	<version>1.2.1</version>
 	<author>shtt.blog</author>
 	<code>extended_layout</code>
 	<link>https://shtt.blog/exteneded_layout</link>
@@ -23,9 +23,9 @@
 		<center><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></center> 
 		</form>
 		</div>
-		<div class="modal-footer">
-		<button type="button" class="btn btn-secondary clear"><?php echo $text_form_clear ?></button>
-		<button type="button" class="btn btn-primary save"><?php echo $text_form_save ?></button>
+		<div class="modal-footer stripped-footer sticky-footer">
+		<button type="button" class="btn btn-sm btn-secondary clear"><?php echo $text_form_clear ?></button>
+		<button type="button" class="btn btn-sm btn-primary save"><?php echo $text_form_save ?></button>
 		</div>
 	</div>
 	</div>
@@ -43,7 +43,7 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 			<!-- //extended_layout -->
 			<tr id="el-row<?php echo $module_row; ?>" class="extended_layout_row" data-module-row="<?php echo $module_row; ?>">
 			<td colspan="3">
-				<i class="fa fa-puzzle-piece fa-fw"></i> <span class="description"><?php echo $text_output_show ?> *</span> <input type="hidden" name="layout_module[<?php echo $module_row; ?>][extended_layout]" value="<?php echo htmlspecialchars($layout_module['extended_layout']); ?>">
+				<i class="fa fa-long-arrow-up fa-fw"></i> <span class="description"><?php echo $text_output_show ?> *</span> <input type="hidden" name="layout_module[<?php echo $module_row; ?>][extended_layout]" value="<?php echo htmlspecialchars($layout_module['extended_layout']); ?>">
 			</td>
 			<td>
 				<button type="button" onclick="editModuleLayout(<?php echo $module_row; ?>);" data-toggle="tooltip" title="<?php echo $text_form_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
@@ -59,7 +59,7 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 	//extended_layout
 	html += '<tr id="el-row' + module_row + '" class="extended_layout_row" data-module-row="' + module_row + '">';
 	html += '<td colspan="3">';
-	html += '<i class="fa fa-puzzle-piece fa-fw"></i> <span class="description"><?php echo $text_output_show ?> *</span> <input type="hidden" name="layout_module[' + module_row + '][extended_layout]" value="">';
+	html += '<i class="fa fa-long-arrow-up fa-fw"></i> <span class="description"><?php echo $text_output_show ?> *</span> <input type="hidden" name="layout_module[' + module_row + '][extended_layout]" value="">';
 	html += '</td>';
 	html += '<td>';
 	html += '<button type="button" onclick="editModuleLayout(' + module_row + ');" data-toggle="tooltip" title="<?php echo $text_form_edit ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></button>';
@@ -68,10 +68,10 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 	//extended_layout
 		]]></add>
 		</operation>
-		<!-- correct remodal module row -->
+		<!-- correct removal module row -->
 		<operation error="skip">
-			<search><![CDATA[$('#module-row{{ module_row }}').remove();]]></search>
-			<add position="replace"><![CDATA[$('#module-row{{ module_row }}').remove();$('#el-row{{ module_row }}').remove();]]></add>
+			<search><![CDATA[$('#module-row<?php echo $module_row; ?>').remove();]]></search>
+			<add position="replace"><![CDATA[$('#module-row<?php echo $module_row; ?>').remove();$('#el-row<?php echo $module_row; ?>').remove();]]></add>
 		</operation>
 		<operation error="skip">
 			<search><![CDATA[$(\'#module-row' + module_row + '\').remove();]]></search>
@@ -88,10 +88,10 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 		$_route 	= 'module/extended_layout';
 		$_model 	= 'model_module_extended_layout';
 		$_name 		= 'Extended layout';
-		$_version 	= '1.2';
+		$_version 	= '1.2.1';
 
-		$this->document->addStyle('view/stylesheet/extended_layout.css');
-		$this->document->addScript('view/javascript/extended_layout.js');
+		$this->document->addStyle('view/stylesheet/extended_layout.css?' . $_version);
+		$this->document->addScript('view/javascript/extended_layout.js?' . $_version);
 
 		$stores = [];
 		foreach ($this->model_setting_store->getStores() as $key => $value) {
