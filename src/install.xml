@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Extended layout</name>
-	<version>1.2.2</version>
-	<author>shtt.blog</author>
+	<version>1.2.3</version>
+	<author>halfhope</author>
 	<code>extended_layout</code>
-	<link>https://shtt.blog/exteneded_layout</link>
+	<link>https://shtt.blog/</link>
 	<file path="admin/view/template/design/layout_form.tpl">
 		<!-- add popup form -->
 		<operation error="skip">
@@ -77,6 +77,10 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 			<search><![CDATA[$(\'#module-row' + module_row + '\').remove();]]></search>
 			<add position="replace"><![CDATA[$(\'#module-row' + module_row + '\').remove();$(\'#el-row' + module_row + '\').remove();]]></add>
 		</operation>
+		<operation error="skip">
+			<search><![CDATA[<h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_form; ?></h3>]]></search>
+			<add position="after"><![CDATA[<h3 class="panel-title pull-right"><?php echo $text_version; ?></h3>]]></add>
+		</operation>
 	</file>
 	<!-- init form data -->
 	<file path="admin/controller/design/layout.php">
@@ -88,7 +92,7 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 		$_route 	= 'module/extended_layout';
 		$_model 	= 'model_module_extended_layout';
 		$_name 		= 'Extended layout';
-		$_version 	= '1.2.1';
+		$_version 	= '1.2.3';
 
 		$this->document->addStyle('view/stylesheet/extended_layout.css?' . $_version);
 		$this->document->addScript('view/javascript/extended_layout.js?' . $_version);
@@ -122,6 +126,7 @@ var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
 		$data['text_form_select']       = $this->language->get('text_form_select');
 		$data['text_output_show']       = $this->language->get('text_output_show');
 		$data['text_form_autocomplete'] = $this->language->get('text_form_autocomplete');
+		$data['text_version'] 				= $_name . ' v' . $_version;
 
 		$data['extended_layout_data'] = [
 			'explain' => $data['explain'],

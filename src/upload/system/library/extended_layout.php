@@ -40,6 +40,8 @@ class Extended_layout {
 		if (!isset($this->product_id)) {
 			if (isset($this->request->get['product_id'])) {
 				$this->product_id = (int) $this->request->get['product_id'];
+			} else {
+				$this->product_id = 0;
 			}
 		}
 		return $this->product_id;
@@ -49,6 +51,8 @@ class Extended_layout {
 		if (!isset($this->information_id)) {
 			if (isset($this->request->get['information_id'])) {
 				$this->information_id = (int) $this->request->get['information_id'];
+			} else {
+				$this->information_id = 0;
 			}
 		}
 		return $this->information_id;
@@ -79,6 +83,8 @@ class Extended_layout {
 				foreach ($query->rows as $key => $value) {
 					$category_ids[] = (int) $value['category_id'];
 				}
+			} else {
+				$category_ids = [];
 			}
 
 			$this->category_ids = $category_ids;
@@ -91,10 +97,12 @@ class Extended_layout {
 			$this->manufacturer_id = 0;
 			if (isset($this->request->get['manufacturer_id'])) {
 				$this->manufacturer_id = (int) $this->request->get['manufacturer_id'];
-			} elseif ($this->request->get['route'] == 'product/product') {
+			} elseif (isset($this->request->get['route']) && $this->request->get['route'] == 'product/product') {
 				$product_id      = $this->getProductId();
 				$query           = $this->db->query("SELECT manufacturer_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int) $product_id);
 				$this->manufacturer_id = (int) $query->num_rows ? $query->row['manufacturer_id'] : 0;
+			} else {
+				$this->manufacturer_id = 0;
 			}
 		}
 		
@@ -151,7 +159,7 @@ class Extended_layout {
 				require_once 'Browser.php';
 			}
 			
-			$Browser = new Browser($_SERVER['HTTP_USER_AGENT']);
+			$Browser = new Browser(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
 			$this->browser = $Browser;
 		}
 
@@ -164,7 +172,7 @@ class Extended_layout {
 				require_once 'Browser.php';
 			}
 
-			$Browser = new Browser($_SERVER['HTTP_USER_AGENT']);
+			$Browser = new Browser(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
 			$this->browser = $Browser;
 		}
 
@@ -176,6 +184,8 @@ class Extended_layout {
 			$this->cart_total = (int) $this->cart->getTotal();
 			if ($currency !== $this->session->data['currency']) {
 				$this->cart_total = (int) $this->currency->convert($this->cart_total, $this->session->data['currency'], $currency);
+			} else {
+				$this->cart_total = 0;
 			}
 		}
 		
@@ -187,6 +197,8 @@ class Extended_layout {
 			$this->cart_sub_total = (int) $this->cart->getSubTotal();
 			if ($currency !== $this->session->data['currency']) {
 				$this->cart_sub_total = (int) $this->currency->convert($this->cart_sub_total, $this->session->data['currency'], $currency);
+			} else {
+				$this->cart_sub_total = 0;
 			}
 		}
 		
@@ -198,6 +210,8 @@ class Extended_layout {
 			$this->cart_weight = (int) $this->cart->getSubTotal();
 			if ($weight_class_id !== $this->config->get('config_weight_class_id')) {
 				$this->weight->convert($this->cart_weight, $this->config->get('config_weight_class_id'), $weight_class_id);
+			} else {
+				$this->cart_weight = 0;
 			}
 		}
 		
