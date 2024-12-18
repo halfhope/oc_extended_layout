@@ -15,3 +15,7 @@
 * fix: Fixed incorrect user group retrieval.
 * fix: Resolved the issue of the missing module table during installation.
 
+#### 1.2.2
+
+* fix: Fixed a bug affecting the visibility of blocks in the form.
+
