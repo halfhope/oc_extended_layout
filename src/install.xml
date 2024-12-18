@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>Extended layout</name>
+	<version>1.2</version>
+	<author>shtt.blog</author>
+	<code>extended_layout</code>
+	<link>https://shtt.blog/exteneded_layout</link>
+	<file path="admin/view/template/design/layout_form.tpl">
+		<!-- add popup form -->
+		<operation error="skip">
+			<search><![CDATA[<?php echo $footer; ?>]]></search>
+			<add position="before"><![CDATA[
+<!-- //extended_layout -->
+<div class="modal fade" tabindex="-1" role="dialog" id="els-modal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+		<button type="button" class="btn close" data-dismiss="modal" aria-label="<?php echo $text_form_close ?>"><span aria-hidden="true">×</span></button>
+		<h4 class="modal-title"><?php echo $text_form_title ?></h4>
+		</div>
+		<div class="modal-body">
+		<form action="" method="post" enctype="multipart/form-data" id="form-module-extended-layout" class="form-horizontal">
+		<center><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></center> 
+		</form>
+		</div>
+		<div class="modal-footer stripped-footer sticky-footer">
+		<button type="button" class="btn btn-sm btn-secondary clear"><?php echo $text_form_clear ?></button>
+		<button type="button" class="btn btn-sm btn-primary save"><?php echo $text_form_save ?></button>
+		</div>
+	</div>
+	</div>
+</div>
+<script>
+var extended_layout_data = <?php echo json_encode($extended_layout_data); ?>;
+</script>
+<!-- //extended_layout -->
+			]]></add>
+		</operation>
+		<!-- add description to already added modules -->
+		<operation error="skip">
+			<search><![CDATA[<?php $module_row++; ?>]]></search>
+			<add position="before"><![CDATA[
+			<!-- //extended_layout -->
+				<tr id="el-row<?php echo $module_row; ?>" class="extended_layout_row" data-module-row="<?php echo $module_row; ?>">
+				<td colspan="3" class="table_fix_23">
+					<span class="description"><?php echo $text_output_show ?> *</span> <input type="hidden" name="layout_module[<?php echo $module_row; ?>][extended_layout]" value="<?php echo htmlspecialchars($layout_module['extended_layout']); ?>">
+					<button type="button" onclick="editModuleLayout(<?php echo $module_row; ?>);" data-toggle="tooltip" title="<?php echo $text_form_edit; ?>" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
+				</td>
+				</tr>
+			<!-- //extended_layout -->
+				]]></add>
+		</operation>
+		<!-- add description field to runtime created modules for VERSION>=2.3 -->
+		<operation error="skip">
+			<search><![CDATA[$('#module-' + type + ' tbody').append(html);]]></search>
+			<add position="before"><![CDATA[
+	//extended_layout
+	html += '<tr id="el-row' + module_row + '" class="extended_layout_row" data-module-row="' + module_row + '">';
+	html += '<td colspan="3" class="table_fix_23">';
+	html += '<span class="description"><?php echo $text_output_show ?> *</span> <input type="hidden" name="layout_module[' + module_row + '][extended_layout]" value="">';
+	html += '<button type="button" onclick="editModuleLayout(' + module_row + ');" data-toggle="tooltip" title="<?php echo $text_form_edit ?>" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>';
+	html += '</td>';
+	html += '</tr>';
+	//extended_layout
+		]]></add>
+		</operation>
+		<!-- correct remodal module row -->
+		<operation error="skip">
+			<search><![CDATA[$('#module-row<?php echo $module_row; ?>').remove();]]></search>
+			<add position="replace"><![CDATA[$('#module-row<?php echo $module_row; ?>').remove();$('#el-row<?php echo $module_row; ?>').remove();]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$(\'#module-row' + module_row + '\').remove();]]></search>
+			<add position="replace"><![CDATA[$(\'#module-row' + module_row + '\').remove();$(\'#el-row' + module_row + '\').remove();]]></add>
+		</operation>
+	</file>
+	<!-- init form data -->
+	<file path="admin/controller/design/layout.php">
+		<operation error="skip">
+			<search><![CDATA[$data['cancel']]]></search>
+			<add position="before"><![CDATA[        //extended_layout
+		$this->load->model('setting/store');
+
+		$_route 	= 'extension/module/extended_layout';
+		$_model 	= 'model_extension_module_extended_layout';
+		$_name 		= 'Extended layout';
+		$_version 	= '1.2';
+
+		$this->document->addStyle('view/stylesheet/extended_layout.css');
+		$this->document->addScript('view/javascript/extended_layout.js');
+
+		$stores = [];
+		foreach ($this->model_setting_store->getStores() as $key => $value) {
+			$stores[] = $value['url'];
+		}
+
+		header('Access-Control-Allow-Origin:*');
+
+		if(isset($this->request->get['layout_id'])){
+			$layout_id_param = '&layout_id=' . $this->request->get['layout_id'];
+		}else{
+			$layout_id_param = '';
+		}
+		
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "extended_layout` (`layout_module_id` int(11) NOT NULL, `layout_id` int(11) NOT NULL, `data` text NOT NULL, PRIMARY KEY (`layout_module_id`), KEY `layout_id` (`layout_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+		
+		$data['form'] = htmlspecialchars_decode($this->url->link($_route . '/form', 'token=' . $this->session->data['token'] . $layout_id_param . $url, 'SSL'));
+		$data['explain'] = htmlspecialchars_decode($this->url->link($_route . '/explain', 'token=' . $this->session->data['token'] . $layout_id_param . $url, 'SSL'));
+		$data['product_autocomplete'] = htmlspecialchars_decode($this->url->link($_route . '/product_autocomplete', 'token=' . $this->session->data['token'] . $layout_id_param . $url, 'SSL'));
+		
+		$this->load->language($_route);
+
+		$data['text_form_close']        = $this->language->get('text_form_close');
+		$data['text_form_edit']         = $this->language->get('text_form_edit');
+		$data['text_form_title']        = $this->language->get('text_form_title');
+		$data['text_form_save']         = $this->language->get('text_form_save');
+		$data['text_form_clear']        = $this->language->get('text_form_clear');
+		$data['text_form_select']       = $this->language->get('text_form_select');
+		$data['text_output_show']       = $this->language->get('text_output_show');
+		$data['text_form_autocomplete'] = $this->language->get('text_form_autocomplete');
+
+		$data['extended_layout_data'] = [
+			'explain' => $data['explain'],
+			'form' => $data['form'],
+			'text_form_select' => $data['text_form_select'],
+			'text_form_autocomplete' => $data['text_form_autocomplete'],
+			'product_autocomplete' => $data['product_autocomplete']
+		];
+
+		//extended_layout
+			]]></add>
+		</operation>
+		<!-- get extended_layout data for each module from db -->
+		<operation error="skip">
+			<search><![CDATA[load->view('design/layout_form]]></search>
+			<add position="before"><![CDATA[        //extended_layout
+		$layout_modules = $this->model_design_layout->getLayoutModules($this->request->get['layout_id']);
+
+		$this->load->model($_route);
+
+		foreach ($layout_modules as $key => $layout_module_data) {
+			$data['layout_modules'][$key]['extended_layout'] = $this->{$_model}->getExtendedLayoutData($layout_module_data['layout_module_id']);
+		}
+		//extended_layout
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="admin/model/design/layout.php">
+		<!-- correct removal extended_module data for each module -->
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "layout_module WHERE layout_id = '" . (int)$layout_id . "'");]]></search>
+			<add position="after"><![CDATA[
+		//extended_layout
+		$this->db->query("DELETE FROM " . DB_PREFIX . "extended_layout WHERE layout_id = '" . (int)$layout_id . "'");
+		//extended_layout]]></add>
+		</operation>
+		<!-- correct edit extended_module data for each module -->
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "layout_module]]></search>
+			<add position="after"><![CDATA[
+				//extended_layout
+				$layout_module_id = $this->db->getLastId();
+				if (isset($layout_module['extended_layout']) && !empty($layout_module['extended_layout'])) { 
+					$this->db->query("INSERT INTO " . DB_PREFIX . "extended_layout SET layout_id = '" . (int)$layout_id . "', layout_module_id = '" . (int)$layout_module_id . "', data = '" . $this->db->escape(htmlspecialchars_decode($layout_module['extended_layout'])) . "'");
+				}
+				//extended_layout
+				]]></add>
+		</operation>
+		<!-- Sort order fix -->
+		<operation error="skip">
+			<search><![CDATA["layout_module WHERE layout_id = '" . (int)$layout_id . "'"]]></search>
+			<add position="replace"><![CDATA["layout_module WHERE layout_id = '" . (int)$layout_id . "' ORDER BY `sort_order` ASC"]]></add>
+		</operation>
+
+	</file>
+
+	<file path="catalog/controller/common/*.php">
+		<!-- init library and get extended_module data -->
+		<operation error="skip">
+			<search><![CDATA[foreach ($modules as $module) {]]></search>
+			<add position="before"><![CDATA[
+		//extended_layout
+		if(!$this->registry->has('extended_layout')){
+			$this->load->library('extended_layout');
+		}
+		$layout_data = $this->extended_layout->getLayoutData($layout_id);
+		//extended_layout
+		]]></add>
+		</operation>
+		<!-- filter module in iteration -->
+		<operation error="skip">
+			<search><![CDATA[foreach ($modules as $module) {]]></search>
+			<add position="after"><![CDATA[
+			//extended_layout
+			if (isset($module['layout_module_id']) && !$this->extended_layout->filterModule($module['layout_module_id'])){
+				continue;
+			}
+			//extended_layout
+		]]></add>
+		</operation>
+	</file>
+
+</modification>
