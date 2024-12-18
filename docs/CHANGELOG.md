@@ -7,3 +7,11 @@
 * fix: Fixed a bug with the list of selected products
 * revert: Removed Select2.js
 
+#### 1.2.1
+
+* feature: Added versioning for the module's CSS/JS files.
+* feature: Introduced a sticky footer in the filter selection popup.
+* feature: Added an up arrow in the description of active filters.
+* fix: Fixed incorrect user group retrieval.
+* fix: Resolved the issue of the missing module table during installation.
+
