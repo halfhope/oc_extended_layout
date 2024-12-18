@@ -26,7 +26,7 @@ var getDescription = function(val, overwrite) {
 				module_row: module_row
 			},
 			success: function(response) {
-				$('#el-row' + module_row).find('span.description').html(response.description);
+				$('#el-row' + module_row).find('span.description').html('<i class="fa fa-long-arrow-up"></i>&nbsp;' + response.description);
 			},
 			error: function(err) {
 				alert(err.responseText);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<name>Extended layout</name>
-	<version>1.2</version>
+	<version>1.2.1</version>
 	<author>shtt.blog</author>
 	<code>extended_layout</code>
 	<link>https://shtt.blog/exteneded_layout</link>
@@ -23,9 +23,9 @@
 		<center><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></center> 
 		</form>
 		</div>
-		<div class="modal-footer">
-		<button type="button" class="btn btn-secondary clear">{{ text_form_clear }}</button>
-		<button type="button" class="btn btn-primary save">{{ text_form_save }}</button>
+		<div class="modal-footer stripped-footer sticky-footer">
+		<button type="button" class="btn btn-sm btn-secondary clear">{{ text_form_clear }}</button>
+		<button type="button" class="btn btn-sm btn-primary save">{{ text_form_save }}</button>
 		</div>
 	</div>
 	</div>
@@ -43,7 +43,7 @@ var extended_layout_data = {{ extended_layout_data|json_encode() }};
 			<!-- //extended_layout -->
 			<tr id="el-row{{ module_row }}" class="extended_layout_row" data-module-row="{{ module_row }}">
 				<td colspan="3" class="table_fix_23">
-				  <span class="description">{{ text_output_show }} *</span> <input type="hidden" name="layout_module[{{ module_row }}][extended_layout]" value="{{ layout_module['extended_layout']|escape }}">
+				  <span class="description"><i class="fa fa-long-arrow-up"></i>&nbsp;{{ text_output_show }} *</span> <input type="hidden" name="layout_module[{{ module_row }}][extended_layout]" value="{{ layout_module['extended_layout']|escape }}">
 				  <button type="button" onclick="editModuleLayout({{ module_row }});" data-toggle="tooltip" title="{{ text_form_edit }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
 				</td>
 			  </tr>
@@ -57,7 +57,7 @@ var extended_layout_data = {{ extended_layout_data|json_encode() }};
 	//extended_layout
 	html += '<tr id="el-row' + module_row + '" class="extended_layout_row" data-module-row="' + module_row + '">';
 	html += '<td colspan="3" class="table_fix_23">';
-	html += '<span class="description">{{ text_output_show }} *</span> <input type="hidden" name="layout_module[' + module_row + '][extended_layout]" value="">';
+	html += '<span class="description"><i class="fa fa-long-arrow-up"></i>&nbsp;{{ text_output_show }} *</span> <input type="hidden" name="layout_module[' + module_row + '][extended_layout]" value="">';
 	html += '<button type="button" onclick="editModuleLayout(' + module_row + ');" data-toggle="tooltip" title="{{ text_form_edit }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>';
 	html += '</td>';
 	html += '</tr>';
@@ -84,10 +84,10 @@ var extended_layout_data = {{ extended_layout_data|json_encode() }};
 		$_route 	= 'extension/module/extended_layout';
 		$_model 	= 'model_extension_module_extended_layout';
 		$_name 		= 'Extended layout';
-		$_version 	= '1.2';
+		$_version 	= '1.2.1';
 
-		$this->document->addStyle('view/stylesheet/extended_layout.css');
-		$this->document->addScript('view/javascript/extended_layout.js');
+		$this->document->addStyle('view/stylesheet/extended_layout.css?' . $_version);
+		$this->document->addScript('view/javascript/extended_layout.js?' . $_version);
 
 		$stores = [];
 		foreach ($this->model_setting_store->getStores() as $key => $value) {

@@ -15,6 +15,8 @@ class Extended_layout {
 		$this->cart     = $registry->get('cart');
 		$this->customer = $registry->get('customer');
 		
+		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "extended_layout` (`layout_module_id` int(11) NOT NULL, `layout_id` int(11) NOT NULL, `data` text NOT NULL, PRIMARY KEY (`layout_module_id`), KEY `layout_id` (`layout_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+		
 		$this->language_id = $this->config->get('config_language_id');
 		$this->config_store_id    = $this->config->get('config_store_id');
 	}
@@ -101,10 +103,10 @@ class Extended_layout {
 
 	public function getCustomerGroupId() {
 		if (!isset($this->customer_group_id)) {
-			$this->customer_group_id = (int) $this->config->get('config_customer_group_id');
-
-			if ($this->customer->isLogged()) {
+			if ($customer_id = $this->customer->isLogged()) {
 				$this->customer_group_id = (int) $this->customer->getGroupId();
+			} else {
+				$this->customer_group_id = 0;
 			}
 		}
 		
