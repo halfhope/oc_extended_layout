@@ -8,7 +8,7 @@ class ExtendedLayout extends \Opencart\System\Engine\Controller {
 	
 	public 	$_route 	= 'extension/extended_layout/module/extended_layout';
 	public 	$_model 	= 'model_extension_extended_layout_module_extended_layout';
-	private $_version 	= '1.2.3';
+	private $_version 	= '1.2.3.1';
 	private $_name 		= 'Extended layout';
 
 	/**
