@@ -43,52 +43,53 @@ var editModuleLayout = function(module_row) {
 		data: {
 			module_row: module_row,
 			extended_layout: $('#el-row' + module_row).find('input[type=hidden][name*=extended_layout]').val()
+		},
+		success: function(response) {
+			$('#form-module-extended-layout').html(response);
+			$('#form-module-extended-layout .form-group.more_hidden').detach().appendTo('#form-module-extended-layout');
+			$('#els-modal #type').on('change load', function(event) {
+				switch (parseInt($(this).val())) {
+					case 1:
+						$('.sproducts').show();
+						$('.scategories' + ', .sinformations' + ', .smanufacturers' + ', .sproduct_categories' + ', .sproduct_manufacturers').hide();
+						break;
+					case 2:
+						$('.sproduct_categories').show();
+						$('.scategories' + ', .sproducts' + ', .sinformations' + ', .smanufacturers' + ', .sproduct_manufacturers').hide();
+						break;
+					case 3:
+						$('.sproduct_manufacturers').show();
+						$('.scategories' + ', .sproducts' + ', .sinformations' + ', .smanufacturers' + ', .sproduct_categories').hide();
+						break;
+				}
+			});
+			$('#form-module-extended-layout #type').trigger('change');
+			$('#form-module-extended-layout input[name=\'products_search\']').autocomplete({
+				source: function(request, response) {
+					$.ajax({
+						url: extended_layout_data['product_autocomplete'] + '&term=' +  encodeURIComponent(request),
+						dataType: 'json',
+						success: function(json) {
+							response($.map(json.results, function(item) {
+								return {
+									label: item['text'],
+									value: item['id']
+								}
+							}));
+						}
+					});
+				},
+				select: function(item) {
+					$('#form-module-extended-layout input[name=\'products_search\']').val('');
+					$('#form-module-extended-layout #product_id' + item['value']).remove();
+					$('#form-module-extended-layout #product_id').append('<div id="product_id' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_id[]" value="' + item['value'] + '" /></div>');	
+					$('#form-module-extended-layout #product_id #product_id' + item['value']).click()
+				}
+			});
+			$('#form-module-extended-layout #product_id').delegate('.fa-minus-circle', 'click', function() {
+				$(this).parent().remove();
+			});
 		}
-	}).success(function(response) {
-		$('#form-module-extended-layout').html(response);
-		$('#form-module-extended-layout .form-group.more_hidden').detach().appendTo('#form-module-extended-layout');
-		$('#els-modal #type').on('change load', function(event) {
-			switch (parseInt($(this).val())) {
-				case 1:
-					$('.sproducts').show();
-					$('.scategories' + ', .sinformations' + ', .smanufacturers' + ', .sproduct_categories' + ', .sproduct_manufacturers').hide();
-					break;
-				case 2:
-					$('.sproduct_categories').show();
-					$('.scategories' + ', .sproducts' + ', .sinformations' + ', .smanufacturers' + ', .sproduct_manufacturers').hide();
-					break;
-				case 3:
-					$('.sproduct_manufacturers').show();
-					$('.scategories' + ', .sproducts' + ', .sinformations' + ', .smanufacturers' + ', .sproduct_categories').hide();
-					break;
-			}
-		});
-		$('#form-module-extended-layout #type').trigger('change');
-		$('#form-module-extended-layout input[name=\'products_search\']').autocomplete({
-			source: function(request, response) {
-				$.ajax({
-					url: extended_layout_data['product_autocomplete'] + '&term=' +  encodeURIComponent(request),
-					dataType: 'json',
-					success: function(json) {
-						response($.map(json.results, function(item) {
-							return {
-								label: item['text'],
-								value: item['id']
-							}
-						}));
-					}
-				});
-			},
-			select: function(item) {
-				$('#form-module-extended-layout input[name=\'products_search\']').val('');
-				$('#form-module-extended-layout #product_id' + item['value']).remove();
-				$('#form-module-extended-layout #product_id').append('<div id="product_id' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_id[]" value="' + item['value'] + '" /></div>');	
-				$('#form-module-extended-layout #product_id #product_id' + item['value']).click()
-			}
-		});
-		$('#form-module-extended-layout #product_id').delegate('.fa-minus-circle', 'click', function() {
-			$(this).parent().remove();
-		});
 	});
 }
 $(document).ready(function() {
