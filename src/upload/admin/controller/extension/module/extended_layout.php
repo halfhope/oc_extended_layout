@@ -5,9 +5,9 @@
 
 class ControllerExtensionModuleExtendedLayout extends Controller {
 	
-	private $_version = '1.2.1';
-	public 	$_route = 'extension/module/extended_layout';
-	public 	$_model = 'model_extension_module_extended_layout';
+	public 	$_route 	= 'extension/module/extended_layout';
+	public 	$_model 	= 'model_extension_module_extended_layout';
+	private $_version 	= '1.2.3';
 
 	public function install() {
 		$this->load->model($this->_route);
