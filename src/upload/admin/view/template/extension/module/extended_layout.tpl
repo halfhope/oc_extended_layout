@@ -57,8 +57,7 @@
 <?php endif ?>
 <!-- sub filters choose end -->
 <!-- sub filters content start -->
-<?php switch ($layout_type): ?>
-<?php case 'product': ?>
+<?php if ($layout_type == 'product'): ?>
 <!-- product start -->
 <div class="form-group form-group-sm sproducts">
   <label class="col-sm-2 control-label" for="input-search"><span data-toggle="tooltip" title="<?php echo $entry_product_help; ?>"><?php echo $entry_product; ?></span></span></label>
@@ -118,8 +117,9 @@
   </div>
 </div>
 <!-- product end -->
+<?php endif ?>
+<?php if ($layout_type == 'category'): ?>
 <!-- category start -->
-<?php case 'category': ?>
 <div class="form-group form-group-sm scategories">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_category_help; ?>"><?php echo $entry_category; ?></span></label>
   <div class="col-sm-10">
@@ -142,8 +142,9 @@
   </div>
 </div>
 <!-- category end -->
+<?php endif ?>
+<?php if ($layout_type == 'manufacturer'): ?>
 <!-- manufacturer start -->
-<?php case 'manufacturer': ?>
 <div class="form-group form-group-sm smanufacturers">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_manufacturer_help; ?>"><?php echo $entry_manufacturer; ?></span></label>
   <div class="col-sm-10">
@@ -166,8 +167,9 @@
   </div>
 </div>
 <!-- manufacturer end -->
+<?php endif ?>
+<?php if ($layout_type == 'information'): ?>
 <!-- information start -->
-<?php case 'information': ?>
 <div class="form-group form-group-sm sinformations">
   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $entry_information_help; ?>"><?php echo $entry_information; ?></span></label>
   <div class="col-sm-10">
@@ -190,7 +192,7 @@
     </div>
 </div>
 <!-- information end -->
-<?php endswitch ?>
+<?php endif ?>
 <!-- sub filters content end -->
 <!-- default start -->
 <div class="form-group form-group-sm suseragent module<?php echo $layout_id ?> common<?php echo $layout_id ?>">
